@@ -1,0 +1,155 @@
+<?php
+    include('conexao.php');
+
+    if(isset($_POST['email']) || isset($_POST['senha'])){
+
+        if(strlen($_POST['email']) == 0) {
+            echo "Preencha seu email";
+        } else if(strlen($_POST['senha']) == 0) {
+            echo "Preencha sua senha";        
+        } else {
+
+            $email = $mysqli->real_escape_string($_POST["email"]);
+            $senha = $mysqli->real_escape_string($_POST["senha"]);
+
+            $sql_code = "SELECT * FROM usuarios WHERE email = '$email' AND senha = '$senha'";
+            $sql_query = $mysqli->query($sql_code) or die("Falha na excução do código SQL: " . $mysqli->error);
+
+            $quantidade = $sql_query->num_rows;
+
+            if($quantidade == 1) {
+
+                $usuario = $sql_query->fetch_assoc();
+
+                if(isset($_SESSION)) {
+                    session_start();
+                }
+
+                $_SESSION['id'] = $usuario['id'];
+                $_SESSION['nome'] = $usuario['nome'];
+
+                header("Location: inicio.php");
+
+            } else {
+                echo "Falha ao logar! E-mail ou senha incorretos";
+        }
+
+    }
+
+}
+?>
+
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('tesdt.jpg');
+            background-size: cover; 
+            background-position: center;
+            background-color: #e0f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative; 
+        }
+
+        .logo {
+            position: absolute;
+            top: 20px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            width: 180px;
+            height: auto; 
+            z-index: 1; 
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-top: 5px solid #2196f3;
+            max-width: 280px;
+            width: 100%; 
+            box-sizing: border-box; 
+            position: relative; 
+            z-index: 2; 
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            color: #2196f3;
+            text-align: center;
+        }
+
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: calc(100% - 20px); 
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; 
+        }
+
+        .login-container input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #2196f3;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .login-container input[type="submit"]:hover {
+            background-color: #1976d2;
+        }
+    </style>
+    <script>
+        function handleLogin(event) {
+            event.preventDefault(); 
+
+            
+            let username = document.getElementById('username').value;
+            let password = document.getElementById('password').value;
+
+            
+            if (username === 'adm' && password === '321') {
+                
+                window.location.href = 'index.html';
+            } else {
+                
+                alert('Usuário ou senha incorretos.');
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <img class="logo" src="logo.png" alt="Logo da Empresa">
+
+    <div class="login-container">
+        <h2>Login</h2>
+        <form onsubmit="handleLogin(event)">
+            <label for="username">Nome de usuário:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" required>
+
+            <input type="submit" value="Entrar">
+        </form>
+    </div>
+
+</body>
+</html>

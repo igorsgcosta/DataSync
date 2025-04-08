@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Denúncia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #000;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .logo-left,
+        .logo-right {
+            max-width: 150px;
+            height: auto;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .logo-right {
+            float: right;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="tel"],
+        textarea,
+        select {
+            width: calc(100% - 10px);
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 35%;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .aba {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            border-radius: 8px 8px 0 0;
+            background-color: #f2f2f2;
+            border-bottom: 1px solid #ddd;
+            width: 100%;
+        }
+        .aba li {
+            float: left;
+            width: 100%;
+        }
+        .aba li a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: black;
+            text-align: center;
+            border-right: 1px solid #ddd;
+            border-radius: 8px 8px 0 0;
+        }
+        .aba li:last-child a {
+            border-right: none;
+        }
+        .aba li a:hover {
+            background-color: #ddd;
+        }
+        .aba li a.active {
+            background-color: #1e90ff;
+            color: white;
+            position: relative;
+            top: -1px;
+        }
+        .conteudo {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            background-color: #fff;
+            width: 91.5%;
+        }
+        .conteudo.active {
+            display: block;
+        }
+        #formulario {
+            clear: both;
+        }
+    </style>
+    <script>
+        function exibirMensagemMotivacional(dataHora) {
+            alert("Sua denúncia foi recebida com sucesso. Você não está sozinho(a) nessa, Supermercados Cometa está aqui para ajudar!\n\nData e Hora da Denúncia: " + dataHora);
+        }
+
+        function enviarDenuncia() {
+            var dataHora = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+
+            exibirMensagemMotivacional(dataHora);
+        }
+
+        function exibirAba(abaId) {
+            var i, conteudos, abas;
+            conteudos = document.getElementsByClassName("conteudo");
+            for (i = 0; i < conteudos.length; i++) {
+                conteudos[i].style.display = "none";
+            }
+            abas = document.getElementsByClassName("aba");
+            for (i = 0; i < abas.length; i++) {
+                abas[i].className = abas[i].className.replace(" active", "");
+            }
+            document.getElementById(abaId).style.display = "block";
+            event.currentTarget.className += " active";
+        }
+
+        function buscarDenuncia() {
+            var protocolo = document.getElementById("protocolo").value;
+
+            var resultadoHTML = "<h3>Detalhes da Denúncia</h3>";
+            resultadoHTML += "<p><strong>Número de Protocolo:</strong> " + protocolo + "</p>";
+            resultadoHTML += "<p><strong>Data e Hora da Denúncia:</strong> 29/04/2024 15:30</p>";
+            resultadoHTML += "<p><strong>Status da Denúncia:</strong> Em análise</p>";
+            resultadoHTML += "<p><a href='gerar_pdf.php?protocolo=" + protocolo + "' target='_blank'>Baixar PDF da Denúncia</a></p>";
+
+            document.getElementById("resultadoAcompanhamento").innerHTML = resultadoHTML;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <img src="cometa.png" alt="Logo da Empresa" class="logo-left">
+        <img src="cipa.png" alt="Logo da CIPA" class="logo-right">
+        
+        <h2>Não ao Assédio, denuncie!</h2>
+        <ul class="aba">
+            <li><a href="formulario.html" class="active" onclick="exibirAba('formulario')">Formulário de Denúncia</a></li>
+        </ul>
+
+        <div id="formulario" class="conteudo active">
+            <form id="formularioDenuncia" enctype="multipart/form-data">
+                <label for="nome">Nome da Vítima (opcional) ou deixe anônimo:</label>
+                <input type="text" id="nome" name="nome">          
+
+                <label for="contato">Número de Contato:</label>
+                <input type="tel" id="contato" name="contato" >
+
+                <label for="nome_acusado">Nome e função/cargo do Acusado:</label>
+                <input type="text" id="nome_acusado" name="nome_acusado">
+
+                <label for="testemunha">Possui Testemunha:</label>
+                <select id="testemunha" name="testemunha" required>
+                    <option value="">Selecione</option>
+                    <option value="sim">Sim</option>
+                    <option value="nao">Não</option>
+                </select>
+                
+                <label for="tipo_assedio">Tipo de Assédio ou Violência:</label>
+                <select id="tipo_assedio" name="tipo_assedio" required>
+                    <option value="">Selecione</option>
+                    <option value="Assédio Sexual">Assédio Sexual</option>
+                    <option value="Assédio Moral">Assédio Moral</option>
+                    <option value="Discriminação">Discriminação</option>
+                    <option value="Agressão Física">Agressão Física</option>
+                    <option value="Outros">Outros</option>          
+                </select>
+
+                <label for="detalhes">Detalhes da Denúncia:</label>
+                <textarea id="detalhes" name="detalhes" rows="4" required></textarea>
+
+                <label for="arquivo">Anexar Arquivos:</label>
+                <input type="file" id="arquivo" name="arquivo[]" multiple>
+
+                <input type="submit" value="Enviar Denúncia" onclick="enviarDenuncia(); return false;">
+            </form>
+        </div>        
+    </div>
+</body>
+</html>
